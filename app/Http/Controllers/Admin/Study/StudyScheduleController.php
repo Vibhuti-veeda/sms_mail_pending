@@ -2071,10 +2071,11 @@ class StudyScheduleController extends GlobalController
     // get upcoming  
     public function getUpComingActivityRecords(){
 
+        $delayActivities = [];
+        $upComingActivities = [];
+
         $users = Admin::where('is_active', 1)->where('is_delete', 0)->where('is_hod', 1)->get(); 
-        /*echo "<pre>";
-        print_r($users->toArray());
-        exit;*/  
+       
         $getUsersWithLocation = Admin::select('id', 'name', 'location_id', 'role_id')
                                 ->with([
                                     'location',
@@ -2084,9 +2085,6 @@ class StudyScheduleController extends GlobalController
                                 ->where('is_delete', 0)
                                 ->where('is_hod', 0)
                                 ->get();
-        /*echo "<pre>";
-        print_r($getUsersWithLocation->toArray());
-        exit; */ 
         $name = 'test';
         $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d');
         $endOfWeek = Carbon::now()->endOfWeek()->format('Y-m-d');
@@ -2130,12 +2128,11 @@ class StudyScheduleController extends GlobalController
                                        ->where('is_active', '=', 1)     
                                        ->where('is_delete', '=', 0)     
                                        ->get();
-                                       /*echo '<pre>';
-                                       print_r($delayActivities->toArray());*/
+                                      
                 $upComingActivities = StudySchedule::select('id', 'study_id', 'activity_id', 'activity_name', 'activity_status', 'activity_type', 'scheduled_start_date', 
                                                     'scheduled_end_date','responsibility_id')
                                                    ->where('activity_status', '=', 'UPCOMING')
-                                                   ->where('responsibility_id', $uv->role_id)
+                                                   ->whereIn('responsibility_id',$roleIds)
                                                    ->whereNotNull('scheduled_start_date')
                                                    ->whereBetween('scheduled_start_date',[$startOfWeek, $endOfWeek])       
                                                    ->with([
@@ -2167,7 +2164,6 @@ class StudyScheduleController extends GlobalController
                                                    ->get();
             }
         }
-        /*exit;*/
         return view('admin.mail.upcoming_activities_list',compact('delayActivities', 'name', 'upComingActivities', 'getUsersWithLocation')); 
     }
 

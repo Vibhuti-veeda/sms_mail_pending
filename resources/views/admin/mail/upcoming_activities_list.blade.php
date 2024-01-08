@@ -60,11 +60,11 @@
                             <td style="border: 1px solid;">
                                     {{ ($uav->scheduled_end_date != '') ? date('d M Y', strtotime($uav->scheduled_end_date)) : '---' }}
                             </td>
-                            @if($uav->responsibility_id == 11)
+                            @if(($uav->responsibility_id == 11) || ($uav->responsibility_id == 12))
                                 <td style="border: 1px solid;">
                                     {{ (( (!is_null($uav->studyNo)) && (!is_null($uav->studyNo->crLocationName)) ) && ($uav->studyNo->crLocationName->location_name != '')) ? $uav->studyNo->crLocationName->location_name : '---' }}
                                 </td>
-                            @elseif(($uav->responsibility_id == 15) || ($uav->responsibility_id == 9))
+                            @elseif(($uav->responsibility_id == 15) || ($uav->responsibility_id == 9) || ($uav->responsibility_id == 13))
                                 <td style="border: 1px solid;">
                                     {{ (( (!is_null($uav->studyNo)) && (!is_null($uav->studyNo->brLocationName)) ) && ($uav->studyNo->brLocationName->location_name != '')) ? $uav->studyNo->brLocationName->location_name : '---' }}
                                 </td>
@@ -72,7 +72,7 @@
                                 <td style="border: 1px solid;"> ---- </td>
                             @endif
 
-                            @if($uav->responsibility_id == 11)
+                            @if(($uav->responsibility_id == 11) || ($uav->responsibility_id == 12))
                                 <td style="border: 1px solid;">
                                     @php $userNames = []; @endphp
                                     @if(!is_null($getUsersWithLocation))
@@ -84,7 +84,7 @@
                                     @endif
                                     {{ implode(' | ', $userNames) }}
                                 </td>
-                            @elseif(($uav->responsibility_id == 15) || ($uav->responsibility_id == 9))
+                            @elseif(($uav->responsibility_id == 15) || ($uav->responsibility_id == 9) || ($uav->responsibility_id == 13))
                                 <td style="border: 1px solid;">
                                     @php $userNames = []; @endphp
                                     @if(!is_null($getUsersWithLocation))
@@ -174,18 +174,18 @@
                             <td style="border: 1px solid;">
                                 {{ ($dav->scheduled_end_date != '') ? date('d M Y', strtotime($dav->scheduled_end_date)) : '---' }}
                             </td>
-                            @if($dav->responsibility_id == 11)
+                            @if(($dav->responsibility_id == 11) || ($dav->responsibility_id == 12))
                                 <td style="border: 1px solid;">
                                     {{ (( (!is_null($dav->studyNo)) && (!is_null($dav->studyNo->crLocationName)) ) && ($dav->studyNo->crLocationName->location_name != '')) ? $dav->studyNo->crLocationName->location_name : '---' }}
                                 </td>
-                            @elseif(($dav->responsibility_id == 15) || ($dav->responsibility_id == 9))
+                            @elseif(($dav->responsibility_id == 15) || ($dav->responsibility_id == 9) || ($dav->responsibility_id == 13))
                                 <td style="border: 1px solid;">
                                     {{ (( (!is_null($dav->studyNo)) && (!is_null($dav->studyNo->brLocationName)) ) && ($dav->studyNo->brLocationName->location_name != '')) ? $dav->studyNo->brLocationName->location_name : '---' }}
                                 </td>
                             @else
                                 <td style="border: 1px solid;"> ---- </td>  
                             @endif
-                            @if($dav->responsibility_id == 11)
+                            @if(($dav->responsibility_id == 11) || ($dav->responsibility_id == 12))
                                 <td style="border: 1px solid;">
                                     @php $userNames = []; @endphp
                                     @if(!is_null($getUsersWithLocation))
@@ -197,12 +197,12 @@
                                     @endif
                                     {{ implode(' | ', $userNames) }}
                                 </td>
-                            @elseif(($dav->responsibility_id == 15) || ($dav->responsibility_id == 9))
+                            @elseif(($dav->responsibility_id == 15) || ($dav->responsibility_id == 9) || ($dav->responsibility_id == 13))
                                 <td style="border: 1px solid;">
                                     @php $userNames = []; @endphp
                                     @if(!is_null($getUsersWithLocation))
                                         @foreach($getUsersWithLocation as $guwlk => $guwlv)
-                                            @if(($guwlv->location_id == $dav->studyNo->br_location) && ($guwlv->role_id == $uav->responsibility_id))
+                                            @if( ($guwlv->location_id == $dav->studyNo->br_location) && ($guwlv->role_id == $dav->responsibility_id) )
                                                 @php $userNames[] = $guwlv->name; @endphp
                                             @endif
                                         @endforeach
@@ -255,6 +255,5 @@
     
     <div class="form-group">
         <h4>Study Management System</h4>
-    </div>
-        
+    </div>        
 </div>
